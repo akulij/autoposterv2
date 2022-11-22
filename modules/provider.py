@@ -7,6 +7,7 @@ from .storer import (
         get_posted_product_ids,
         is_product_posted,
         add_post,
+        get_product_post,
         )
 from .poster import publish_to_telegram, renew_telegram_post
 

@@ -1,6 +1,7 @@
 import os
 import random
 import time
+from typing import Literal
 
 from aiogram.types import InputMediaPhoto
 
@@ -13,7 +14,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 CHAT_ID = int(os.getenv("CHAT_ID"))
-GENDER = os.getenv("GENDER")
+GENDER: Literal["man", "woman"] = os.getenv("GENDER")
 assert GENDER in ["man", "woman"]
 
 TOKENS = [
@@ -25,7 +26,7 @@ bots: list[Bot] = []
 for token in TOKENS:
     bots.append(Bot(token))
 
-async def publish_to_telegram(product: ProductInfo):
+async def publish_to_telegram(product: ProductInfo) -> tuple[int, int, str, list[tuple[int, int]]]:
     msg = build_message(product, GENDER)
 
     plinks = get_product_picture_links(product.id)
@@ -56,4 +57,12 @@ async def publish_to_telegram(product: ProductInfo):
         pass
 
 async def renew_telegram_post(chat_id: int, msg_id: int, product: ProductInfo, prev_text: str, photo_infos: list[tuple[int, int]]):
-    pass
+    msg = build_message(product, GENDER)
+    link = get_product_picture_links(product.id)[0]
+    photo = InputMediaPhoto(link, caption=msg, parse_mode="HTML")
+    await random.choice(bots).edit_message_media(photo, chat_id=chat_id, message_id=msg_id)
+    plinks = get_product_picture_links(product.id)
+    for photo_info, plink in zip(photo_infos, plinks[1:]):
+        pchat_id, pmsg_id = photo_info
+        photo = InputMediaPhoto(plink)
+        await random.choice(bots).edit_message_media(photo, chat_id=pchat_id, message_id=pmsg_id)

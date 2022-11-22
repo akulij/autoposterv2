@@ -18,6 +18,11 @@ class PostId(BaseModel):
     chat_id = IntegerField()
     message_id = IntegerField()
     
+class PostPhoto(BaseModel):
+    product_id = IntegerField()
+    chat_id = IntegerField()
+    message_id = IntegerField()
+    
 class SalePostId(BaseModel):
     product_id = IntegerField()
     chat_id = IntegerField()
