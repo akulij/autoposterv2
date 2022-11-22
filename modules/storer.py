@@ -37,7 +37,13 @@ def is_product_posted(product_id: int):
     return PostId.select().where(PostId.product_id == product_id).exists()
 
 
-def add_post(product_id: int, chat_id: int, message_id: int, photo_infos: list):
+def add_post(product_id: int, chat_id: int, message_id: int, message_text: str, photo_infos: list):
     PostId.create(product_id=product_id, chat_id=chat_id, message_id=message_id)
     for info in photo_infos:
         raise NotImplemented
+
+def set_renew_flag(flag: bool):
+    if RenewPosts.select().exists():
+        RenewPosts.update(flag=flag).execute()
+    else:
+        RenewPosts.create(flag=flag)

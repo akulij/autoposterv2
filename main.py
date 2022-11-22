@@ -13,6 +13,7 @@ async def main():
     while True:
         is_new_product = False
         for product in get_new_products():
+            print(product)
             await make_post(product)
         for product in get_edit_products():
             is_new_product = True

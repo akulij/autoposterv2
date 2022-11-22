@@ -30,12 +30,16 @@ def get_product_info(session, item_id: int, session_uri) -> ProductInfo:
     is_for_woman = True if product.gW else False
     is_discount = True if product.dSale_SN else False
     discount_size = product.discount_SN
+
+    # TODO: Unimplemented
+    is_updated = False
+
     pi = ProductInfo(
             id=item_id,
             is_for_man=is_for_man,
             is_for_woman=is_for_woman,
             name=str(name),
-            price=int(str(price)),
+            price=price,
             description=description,
             sizes=sizes,
             photo_url=photo_url,

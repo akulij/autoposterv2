@@ -35,3 +35,6 @@ def get_db_product_ids():
     products = session.scalars(q).all()
 
     return products
+
+def get_product_picture_links(product_id: int):
+    return db_utils.get_product_picture_links(session, product_id)

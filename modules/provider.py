@@ -38,11 +38,11 @@ def delete_sale_products():
 
 async def make_post(product: ProductInfo):
     if not is_product_posted(product.id):
-        chat_id, msg_id, photo_infos = await publish_to_telegram(product)
-        add_post(product.id, chat_id, msg_id, photo_infos)
+        chat_id, msg_id, msg_text, photo_infos = await publish_to_telegram(product)
+        add_post(product.id, chat_id, msg_id, msg_text, photo_infos)
     else:
-        chat_id, msg_id, post_text = get_product_post(product.id)
-        await renew_telegram_post(chat_id, msg_id, product, post_text)
+        chat_id, msg_id, post_text, photo_infos = get_product_post(product.id)
+        await renew_telegram_post(chat_id, msg_id, product, post_text, photo_infos)
 
 
 def make_sale_post(product: ProductInfo):
