@@ -7,7 +7,7 @@ from aiogram.types import InputMediaPhoto
 
 from .types import ProductInfo
 from .db import get_product_picture_links
-from .builder import build_message
+from .builder import build_message, build_sale_message
 from .storer import set_renew_flag
 
 from dotenv import load_dotenv
@@ -26,8 +26,9 @@ bots: list[Bot] = []
 for token in TOKENS:
     bots.append(Bot(token))
 
-async def publish_to_telegram(product: ProductInfo) -> tuple[int, int, str, list[tuple[int, int]]]:
-    msg = build_message(product, GENDER)
+async def publish_to_telegram(product: ProductInfo, is_sale: bool = False) -> tuple[int, int, str, list[tuple[int, int]]]:
+    builder = build_message if not is_sale else build_sale_message
+    msg = builder(product, GENDER)
 
     plinks = get_product_picture_links(product.id)
     pictures = []
@@ -37,7 +38,7 @@ async def publish_to_telegram(product: ProductInfo) -> tuple[int, int, str, list
     # message = await random.choice(bots).send_photo(chat_id, photo=photo_url, caption=msg, reply_markup=keyboard, parse_mode="MARKDOWN")
     try:
         messages = await random.choice(bots).send_media_group(CHAT_ID, pictures)
-        set_renew_flag(True)
+        if not is_sale: set_renew_flag(True)
         time.sleep(2)
         caption_message = messages[0]
         photo_messages = messages[1:]
@@ -56,8 +57,9 @@ async def publish_to_telegram(product: ProductInfo) -> tuple[int, int, str, list
     except:
         pass
 
-async def renew_telegram_post(chat_id: int, msg_id: int, product: ProductInfo, prev_text: str, photo_infos: list[tuple[int, int]]):
-    msg = build_message(product, GENDER)
+async def renew_telegram_post(chat_id: int, msg_id: int, product: ProductInfo, prev_text: str, photo_infos: list[tuple[int, int]], is_sale: bool = False):
+    builder = build_message if not is_sale else build_sale_message
+    msg = builder(product, GENDER)
     link = get_product_picture_links(product.id)[0]
     photo = InputMediaPhoto(link, caption=msg, parse_mode="HTML")
     await random.choice(bots).edit_message_media(photo, chat_id=chat_id, message_id=msg_id)
