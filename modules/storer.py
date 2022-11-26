@@ -55,6 +55,20 @@ def add_sale_post(product_id: int, chat_id: int, message_id: int, message_text: 
     for info in photo_infos:
         SalePostPhoto.create(product_id=product_id, chat_id=info[0], message_id=info[1])
 
+def get_sale_messages():
+    msgs = []
+    for msg in SalePostId.select():
+        msgs.append((msg.product_id, msg.chat_id, msg.message_id))
+
+    return msgs
+
+def get_nophoto_sale_posts(product_id: int, chat_id: int) -> list[tuple[int, int]]:
+    q = SalePostPhoto.select().where((SalePostPhoto.product_id==product_id), (SalePostPhoto.chat_id == chat_id))
+    posts = []
+    for post in q:
+        posts.append((post.chat_id, post.message_id))
+    return posts
+
 def get_product_post(product_id: int) -> tuple[int, int, str, list[tuple[int, int]]]:
     """
     return: chat_id, message_id, post_text, photo_infos
