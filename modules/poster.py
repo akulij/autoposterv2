@@ -4,6 +4,7 @@ import time
 from typing import Literal
 
 from aiogram.types import InputMediaPhoto, InputFile
+from aiogram import Bot
 
 from .types import ProductInfo
 from .db import get_product_picture_links
@@ -42,10 +43,6 @@ async def publish_to_telegram(product: ProductInfo, is_sale: bool = False) -> tu
         time.sleep(2)
         caption_message = messages[0]
         photo_messages = messages[1:]
-        # for message_ in messages:
-        #     if message_.caption:
-        #         message = message_
-        # message = await random.choice(bots).send_photo(chat_id, photo=photo_url, caption=msg, reply_markup=keyboard, parse_mode="MARKDOWN")
         chat_id = caption_message.chat.id
         msg_id = caption_message.message_id
         photo_infos = []
@@ -53,7 +50,6 @@ async def publish_to_telegram(product: ProductInfo, is_sale: bool = False) -> tu
             photo_infos.append((photo_msg.chat.id, photo_msg.message_id))
 
         return chat_id, msg_id, msg, photo_infos
-        # create_post(product.id, chat_id, msg_id)
     except:
         pass
 
@@ -70,7 +66,7 @@ async def renew_telegram_post(chat_id: int, msg_id: int, product: ProductInfo, p
         await random.choice(bots).edit_message_media(photo, chat_id=pchat_id, message_id=pmsg_id)
 
 async def delete_telegram_message(chat_id: int, msg_id: int):
-    raise NotImplemented
+    await random.choice(bots).delete_message(chat_id, msg_id)
 
 async def publish_prepost_telegram(prepost):
     if prepost.photo:

@@ -133,3 +133,17 @@ def get_preposts():
 def delete_prepost(chat_id: int, message_id: int):
     Prepost.delete().where(Prepost.chat_id == chat_id, Prepost.message_id == message_id).execute()
 
+def get_post_format() -> str:
+    return PostFormat.select().get().format_text
+
+def get_sale_post_format() -> str:
+    return SalePostFormat.select().get().format_text
+
+def set_post_format(format_text: str):
+    PostFormat.delete().execute()
+    PostFormat.create(format_text=format_text)
+
+def set_sale_post_format(format_text: str):
+    SalePostFormat.delete().execute()
+    SalePostFormat.create(format_text=format_text)
+

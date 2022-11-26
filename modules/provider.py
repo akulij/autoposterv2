@@ -18,6 +18,8 @@ from .storer import (
         get_sale_messages,
         get_prepost_info,
         create_prepost,
+        get_preposts,
+        delete_prepost,
         )
 from .poster import (publish_to_telegram,
         renew_telegram_post,
@@ -60,20 +62,15 @@ def get_sale_products():
 async def delete_sale_products():
     for product_id, chat_id, msg_id in get_sale_messages():
         try:
-            # await bot.delete_message(chat_id, msg_id)
             await delete_telegram_message(chat_id, msg_id)
         except:
             pass
         delete_sale_post(product_id)
         for chat_id, msg_id in get_nophoto_sale_posts(product_id, chat_id):
             try:
-                # await bot.delete_message(chat_id, msg_id)
                 await delete_telegram_message(chat_id, msg_id)
             except:
                 pass
-    # for chat_id, msg_id in get_preposts():
-    #     await bot.delete_message(chat_id, msg_id)
-    #     delete_prepost(chat_id, msg_id)
 
 
 async def make_post(product: ProductInfo):
@@ -93,7 +90,12 @@ async def make_sale_post(product: ProductInfo):
         chat_id, msg_id, post_text, photo_infos = get_sale_product_post(product.id)
         await renew_telegram_post(chat_id, msg_id, product, post_text, photo_infos, is_sale=True)
 
-async def make_prepost(chat_id: int):
+async def make_prepost():
     prepost = get_prepost_info()
     chat_id, msg_id = await publish_prepost_telegram(prepost)
     create_prepost(chat_id, msg_id)
+
+async def delete_preposts():
+    for chat_id, msg_id in get_preposts():
+        await delete_telegram_message(chat_id, msg_id)
+        delete_prepost(chat_id, msg_id)

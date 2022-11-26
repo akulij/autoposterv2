@@ -1,3 +1,3 @@
-from db_peewee import migrate
+from modules.storer import migrate
 
 migrate()
