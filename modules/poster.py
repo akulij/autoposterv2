@@ -3,7 +3,7 @@ import random
 import time
 from typing import Literal
 
-from aiogram.types import InputMediaPhoto
+from aiogram.types import InputMediaPhoto, InputFile
 
 from .types import ProductInfo
 from .db import get_product_picture_links
@@ -68,3 +68,14 @@ async def renew_telegram_post(chat_id: int, msg_id: int, product: ProductInfo, p
         pchat_id, pmsg_id = photo_info
         photo = InputMediaPhoto(plink)
         await random.choice(bots).edit_message_media(photo, chat_id=pchat_id, message_id=pmsg_id)
+
+async def delete_telegram_message(chat_id: int, msg_id: int):
+    raise NotImplemented
+
+async def publish_prepost_telegram(prepost):
+    if prepost.photo:
+        msg = await random.choice(bots).send_photo(CHAT_ID, InputFile(prepost.photo), prepost.caption, parse_mode="HTML")
+    else:
+        msg = await random.choice(bots).send_message(CHAT_ID, prepost.caption, parse_mode="HTML")
+
+    return (msg.chat.id, msg.message_id)

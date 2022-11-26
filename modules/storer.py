@@ -69,6 +69,9 @@ def get_nophoto_sale_posts(product_id: int, chat_id: int) -> list[tuple[int, int
         posts.append((post.chat_id, post.message_id))
     return posts
 
+def delete_sale_post(product_id: int):
+    SalePostId.delete().where(SalePostId.product_id == product_id).execute()
+
 def get_product_post(product_id: int) -> tuple[int, int, str, list[tuple[int, int]]]:
     """
     return: chat_id, message_id, post_text, photo_infos
@@ -97,3 +100,36 @@ def set_renew_flag(flag: bool):
         RenewPosts.update(flag=flag).execute()
     else:
         RenewPosts.create(flag=flag)
+
+def get_renew_flag() -> bool:
+    if RenewPosts.select().exists():
+        return RenewPosts.select().get().flag
+    else:
+        return False
+
+def get_prepost_info():
+    return PrepostInfo.select().get()
+
+def set_prepost_info(caption: str | None = None, photo: str | None = None):
+    if PrepostInfo.select().exists():
+        if caption:
+            PrepostInfo.update(caption=caption).execute()
+        if photo:
+            PrepostInfo.update(photo=photo).execute()
+    else:
+        PrepostInfo.create(photo=photo, caption=caption)
+
+def create_prepost(chat_id: int, message_id: int):
+    Prepost.create(chat_id=chat_id, message_id=message_id)
+
+def get_preposts():
+    post_query = Prepost.select()
+    posts = []
+    for post in post_query:
+        posts.append((post.chat_id, post.message_id))
+
+    return posts
+
+def delete_prepost(chat_id: int, message_id: int):
+    Prepost.delete().where(Prepost.chat_id == chat_id, Prepost.message_id == message_id).execute()
+

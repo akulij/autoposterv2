@@ -7,20 +7,26 @@ from modules.provider import (
         make_post,
         make_sale_post,
         )
+from modules.storer import (
+        get_renew_flag,
+        set_renew_flag,
+        )
 
 
 async def main():
     while True:
-        is_new_product = False
         for product in get_new_products():
-            is_new_product = True
+            set_renew_flag(True)
             print(product)
             await make_post(product)
         for product in get_edit_products():
-            is_new_product = True
+            set_renew_flag(True)
             await make_post(product)
-        if is_new_product:
-            delete_sale_products()
+        if get_renew_flag():
+            await delete_sale_products()
+            await delete_prepost()
+            set_renew_flag(False)
+        make_prepost()
         for product in get_sale_products():
             await make_sale_post(product)
         await asyncio.sleep(10)
