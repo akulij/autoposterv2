@@ -13,8 +13,8 @@ def get_product_data(session, item_id: int) -> Product:
 
 def get_product_info(session, item_id: int, session_uri) -> ProductInfo:
     product = get_product_data(session, item_id)
-    name = product.name
-    price = product.price
+    name = product.name_ru or product.name
+    price = product.price_ru
     sizes = get_product_sizes(session, item_id)
     tags = product.tags
     photo_url = f"https://www.snkrs.su/img/product/product_{item_id}/img.jpg"
@@ -25,11 +25,11 @@ def get_product_info(session, item_id: int, session_uri) -> ProductInfo:
         hpu = None
     # site_link = f"https://www.snkrs.su/product/{hpu}"
     # order_link = f"https://www.snkrs.su/checkouts/ocf5safdi0bypjlet01u_info_{item_id}"
-    description: str = str(product.Text)[:200] if product.Text else ""
+    description: str = str(product.Text_ru)[:200] if product.Text_ru else ""
     is_for_man = True if product.gM else False
     is_for_woman = True if product.gW else False
-    is_discount = True if product.dSale_SN else False
-    discount_size = product.discount_SN
+    is_discount = True if product.dSale_SH else False
+    discount_size = product.discount_SH
 
     # TODO: Unimplemented
     is_updated = False
