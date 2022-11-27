@@ -22,6 +22,8 @@ TOKENS = [
         "5558500501:AAFcvh2thvu3_R-TK9sqlr2QNaUrfWomZ8A",
         "5457322651:AAGAuMomAeSNqLIPxn1z27FUoMRqC7hG8-g",
         "5619328360:AAF1CuZvP_HuOA-pamLwK9t0b_ej6dUNsRk",
+        "5969901906:AAG0VkTCjn91oLNmcQMZURXIsPeisiMb7Sw",
+        "5903197168:AAFUCw8k7pmX9z9N5HKCUJzoeOY3WmyM5vM",
         ]
 bots: list[Bot] = []
 for token in TOKENS:
