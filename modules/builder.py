@@ -1,7 +1,7 @@
 import datetime
 from typing import Literal
 from .db import ProductInfo
-import .storer as db_peewee
+from . import storer as db_peewee
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 def build_message(product: ProductInfo, gender: Literal["man"] | Literal["woman"]):
