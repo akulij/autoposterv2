@@ -1,3 +1,4 @@
+import time
 import asyncio
 from modules.provider import (
         get_new_products,
@@ -17,13 +18,18 @@ from modules.storer import (
 
 async def main():
     while True:
+        print("posting new products...")
         for product in get_new_products():
             set_renew_flag(True)
             print(product)
             await make_post(product)
+            time.sleep(2)
+            print(f"made post of {product}")
+        print("editing products...")
         for product in get_edit_products():
             set_renew_flag(True)
             await make_post(product)
+            print(f"edited product {product}")
         if get_renew_flag():
             await delete_sale_products()
             await delete_preposts()
