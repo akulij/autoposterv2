@@ -11,8 +11,11 @@ class Product(Base):
     id = Column(Integer, primary_key=True)
     active = Column(Integer)
     name = Column(String)
+    name_ru = Column(String)
     price = Column(Float)
+    price_ru = Column(Float)
     Text = Column(String)
+    Text_ru = Column(String)
     id_catalog = Column(Integer)
     id_category = Column(Integer)
     size = Column(VARCHAR)
@@ -22,9 +25,9 @@ class Product(Base):
     date_add = Column(DateTime)
     date_upd = Column(DateTime)
 
-    dSale_SN = Column(Integer)
-    discount_SN = Column(Integer)
-    dSaleDateEnd_SN =Column(DateTime)
+    dSale_SH = Column(Integer)
+    discount_SH = Column(Integer)
+    dSaleDateEnd_SN = Column(DateTime)
     
     def __str__(self):
         return str(self.__dict__)
