@@ -52,6 +52,11 @@ def get_db_edit_product_ids() -> list[int]:
     return products
 # print(get_db_edit_product_ids())
 
+def set_refresh_all(flag: bool):
+    q = update(ProductFlags).where().values(update_flag_ru = int(flag))
+    session.execute(q)
+    session.commit()
+
 def set_edited(product_id: int):
     q = update(ProductFlags).where(ProductFlags.id == product_id).values(update_flag_ru = 0)
     session.execute(q)
