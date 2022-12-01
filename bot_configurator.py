@@ -9,7 +9,7 @@ from keyboards import start_keyboard
 
 load_dotenv()
 
-TOKEN = os.getenv("BOT_TOKEN")
+TOKEN = os.getenv("ADMIN_BOT_TOKEN")
 if TOKEN:
     bot = Bot(TOKEN)
 else:
