@@ -1,3 +1,4 @@
+import traceback
 import os
 import random
 import time
@@ -24,10 +25,19 @@ TOKENS = [
         "5619328360:AAF1CuZvP_HuOA-pamLwK9t0b_ej6dUNsRk",
         "5969901906:AAG0VkTCjn91oLNmcQMZURXIsPeisiMb7Sw",
         "5903197168:AAFUCw8k7pmX9z9N5HKCUJzoeOY3WmyM5vM",
+        "5921124241:AAHA7phI42KUK2nYwmhqnAlNPRaRFfUmIyI",
         ]
 bots: list[Bot] = []
 for token in TOKENS:
     bots.append(Bot(token))
+
+def generator(l):
+    idx = 0
+    while True:
+        yield l[idx%len(l)]
+        idx += 1
+
+bot = generator(bots)
 
 async def publish_to_telegram(product: ProductInfo, is_sale: bool = False) -> tuple[int, int, str, list[tuple[int, int]]]:
     builder = build_message if not is_sale else build_sale_message
@@ -35,16 +45,19 @@ async def publish_to_telegram(product: ProductInfo, is_sale: bool = False) -> tu
 
     plinks = get_product_picture_links(product.id)
     pictures = []
+    print(msg)
     for idx, link in enumerate(plinks):
+        print(link)
         pictures.append(InputMediaPhoto(link, caption=msg if idx == 0 else None, parse_mode="HTML"))
     pictures = pictures[:4]
-    # message = await random.choice(bots).send_photo(chat_id, photo=photo_url, caption=msg, reply_markup=keyboard, parse_mode="MARKDOWN")
+    # message = await next(bot).send_photo(chat_id, photo=photo_url, caption=msg, reply_markup=keyboard, parse_mode="MARKDOWN")
     # if True:
     while True:
         try:
-            messages = await random.choice(bots).send_media_group(CHAT_ID, pictures)
+            poster = next(bot)
+            messages = await poster.send_media_group(CHAT_ID, pictures)
             if not is_sale: set_renew_flag(True)
-            time.sleep(4)
+            # time.sleep(4)
             caption_message = messages[0]
             photo_messages = messages[1:]
             chat_id = caption_message.chat.id
@@ -54,29 +67,37 @@ async def publish_to_telegram(product: ProductInfo, is_sale: bool = False) -> tu
                 photo_infos.append((photo_msg.chat.id, photo_msg.message_id))
 
             return chat_id, msg_id, msg, photo_infos
-        except:
-            print("sleeping for 30 seconds...")
-            time.sleep(30)
+        except Exception as e:
+            # await bots[0].send_message(958170391, f"Catched Exception: {e}\nTraceback: {traceback.format_exc()}")
+            print(e)
+            print("sleeping for 10 seconds...")
+            time.sleep(10)
 
 async def renew_telegram_post(chat_id: int, msg_id: int, product: ProductInfo, prev_text: str, photo_infos: list[tuple[int, int]], is_sale: bool = False):
     builder = build_message if not is_sale else build_sale_message
     msg = builder(product, GENDER)
     link = get_product_picture_links(product.id)[0]
     photo = InputMediaPhoto(link, caption=msg, parse_mode="HTML")
-    await random.choice(bots).edit_message_media(photo, chat_id=chat_id, message_id=msg_id)
+    try:
+        await next(bot).edit_message_media(photo, chat_id=chat_id, message_id=msg_id)
+    except:
+        pass
     plinks = get_product_picture_links(product.id)
     for photo_info, plink in zip(photo_infos, plinks[1:]):
         pchat_id, pmsg_id = photo_info
         photo = InputMediaPhoto(plink)
-        await random.choice(bots).edit_message_media(photo, chat_id=pchat_id, message_id=pmsg_id)
+        try:
+            await next(bot).edit_message_media(photo, chat_id=pchat_id, message_id=pmsg_id)
+        except:
+            pass
 
 async def delete_telegram_message(chat_id: int, msg_id: int):
-    await random.choice(bots).delete_message(chat_id, msg_id)
+    await next(bot).delete_message(chat_id, msg_id)
 
 async def publish_prepost_telegram(prepost):
     if prepost.photo:
-        msg = await random.choice(bots).send_photo(CHAT_ID, InputFile(prepost.photo), prepost.caption, parse_mode="HTML")
+        msg = await next(bot).send_photo(CHAT_ID, InputFile(prepost.photo), prepost.caption, parse_mode="HTML")
     else:
-        msg = await random.choice(bots).send_message(CHAT_ID, prepost.caption, parse_mode="HTML")
+        msg = await next(bot).send_message(CHAT_ID, prepost.caption, parse_mode="HTML")
 
     return (msg.chat.id, msg.message_id)
