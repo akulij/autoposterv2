@@ -201,7 +201,6 @@ def is_sale_post_date_actual(product_id: int, chat_id: int):
         return False
     else:
         date = datetime.now()
-        print(f"{post.date_posted}")
         date_posted = datetime.strptime(post.date_posted, "%Y-%m-%d")
         return all([
             date_posted.day == date.day,
