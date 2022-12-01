@@ -25,7 +25,9 @@ def get_product_info(session, item_id: int, session_uri) -> ProductInfo:
         hpu = None
     # site_link = f"https://www.snkrs.su/product/{hpu}"
     # order_link = f"https://www.snkrs.su/checkouts/ocf5safdi0bypjlet01u_info_{item_id}"
-    description: str = str(product.Text_ru)[:200] if product.Text_ru else ""
+    # description: str = str(product.Text_ru)[:200] if product.Text_ru else ""
+    description: str = str(product.Text_ru) if product.Text_ru else ""
+    description = escape_chars(description)
     is_for_man = True if product.gM else False
     is_for_woman = True if product.gW else False
     is_discount = True if product.dSale_SH else False
@@ -56,6 +58,8 @@ def get_product_info(session, item_id: int, session_uri) -> ProductInfo:
 def get_hpu(session_uri, item_id: int):
     return session_uri.query(Uri).filter(Uri.type == "product", Uri.id_type == item_id).first().hpu
 
+def escape_chars(text: str) -> str:
+    return text.replace("<", "&lt;").replace(">", "&gt;")
 
 def prepare_size(size: str) -> float:
     r = re.compile(r"([0-9]+\.?[0-9]*)")
@@ -108,13 +112,13 @@ def get_product_picture_links(session, product_id: int):
     q = select(ProductPicture).where(ProductPicture.product_id == product_id).order_by(ProductPicture.sort)
     pictures = []
     for picture in session.scalars(q):
-        picture_link = f"https://www.snkrs.su/img/product/product_{product_id}/{picture.img}"
+        picture_link = f"https://www.snkrs.su/img/product/product_{product_id}/large_{picture.img}"
         pictures.append(picture_link)
 
     return pictures
 
 def is_product_sale(session, product_id: int) -> bool:
     try:
-        return bool(session.query(Product).filter(Product.id == product_id).first().dSale_SN)
+        return bool(session.query(Product).filter(Product.id == product_id).first().dSale_SH)
     except:
         return False

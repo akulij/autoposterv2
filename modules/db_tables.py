@@ -74,3 +74,10 @@ class ProductFlags(Base):
     id = Column(Integer, primary_key=True)
     update_flag = Column(Integer)
     update_flag_ru = Column(Integer)
+
+class Promos(Base):
+    __tablename__ = "bot_promos"
+
+    id = Column(Integer, primary_key=True)
+    promo = Column(VARCHAR)
+    telegram_user_id = Column(Integer)
