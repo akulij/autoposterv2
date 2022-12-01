@@ -6,9 +6,11 @@ from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 def build_message(product: ProductInfo, gender: Literal["man"] | Literal["woman"]):
     description = ""
+    description_max_len = 200
     if product.description:
-        tail = "..." if len(product.description) > 199 else ""
-        description = f"{product.description[:199].strip()}{tail}\n\n"
+        tail = "..." if len(product.description) > description_max_len else ""
+        description = f"{product.description[:description_max_len].strip()}{tail}\n\n"
+        # description = product.description
     tags = ""
     if product.tags:
         tags = product.tags
@@ -38,9 +40,11 @@ def build_message(product: ProductInfo, gender: Literal["man"] | Literal["woman"
 
 def build_sale_message(product: ProductInfo, gender: Literal["man"] | Literal["woman"]):
     description = ""
+    description_max_len = 200
     if product.description:
-        tail = "..." if len(product.description) > 199 else ""
-        description = f"{product.description[:199].strip()}{tail}\n\n"
+        tail = "..." if len(product.description) > description_max_len else ""
+        description = f"{product.description[:description_max_len].strip()}{tail}\n\n"
+        # description = product.description
     tags = ""
     if product.tags:
         tags = product.tags
@@ -60,8 +64,8 @@ def build_sale_message(product: ProductInfo, gender: Literal["man"] | Literal["w
 
 def build_keyboard(product: ProductInfo, gender: Literal["man"] | Literal["woman"]):
     keyboard = InlineKeyboardMarkup()
-    man_url = f"https://www.snkrs.su/product/{product.hpu}"
-    woman_url = f"https://www.snkrs.su/product/women/{product.hpu}"
+    man_url = f"https://www.sneakerhead.su/product/{product.hpu}"
+    woman_url = f"https://www.sneakerhead.su/product/women/{product.hpu}"
     url = man_url if gender == "man" else woman_url
     keyboard.add(InlineKeyboardButton("Go to site", url=url))
     man_order_url = f"https://www.snkrs.su/checkouts/ocf5safdi0bypjlet01u_info_{product.id}"
