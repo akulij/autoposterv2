@@ -106,6 +106,7 @@ async def make_post(product: ProductInfo):
 
 
 async def make_sale_post(product: ProductInfo):
+    print(f"SPE {is_sale_product_posted(product.id)}")
     if not is_sale_product_posted(product.id):
         chat_id, msg_id, msg_text, photo_infos = await publish_to_telegram(product, is_sale=True)
         add_sale_post(product.id, chat_id, msg_id, msg_text, photo_infos)
