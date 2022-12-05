@@ -60,7 +60,7 @@ def get_edit_products():
 
 def get_edit_sale_products():
     edit_product_ids = get_db_edit_product_ids()
-    unmatching_date_ids = get_db_unmatching_date_product_ids()
+    unmatching_date_ids = list(get_db_unmatching_date_product_ids())
     product_ids = set(edit_product_ids)
     product_ids.union(unmatching_date_ids)
     for product_id in product_ids:

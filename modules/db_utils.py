@@ -112,7 +112,7 @@ def get_product_picture_links(session, product_id: int):
     q = select(ProductPicture).where(ProductPicture.product_id == product_id).order_by(ProductPicture.sort)
     pictures = []
     for picture in session.scalars(q):
-        picture_link = f"https://www.snkrs.su/img/product/product_{product_id}/large_{picture.img}"
+        picture_link = f"https://www.sneakerhead.su/img/product/product_{product_id}/large_{picture.img}"
         pictures.append(picture_link)
 
     return pictures
