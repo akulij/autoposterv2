@@ -45,8 +45,8 @@ def get_new_products():
     # return new_products
 
 def get_removed_sale_product_ids():
-    posted_products = get_posted_product_ids()
-    db_products = get_db_product_ids()
+    posted_products = get_posted_sale_product_ids()
+    db_products = get_db_sale_product_ids()
     removed_ids = list(set(posted_products) - set(db_products))
     print(removed_ids)
 
