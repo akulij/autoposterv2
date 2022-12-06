@@ -103,7 +103,7 @@ def get_sale_product_post(product_id: int) -> tuple[int, int, str, list[tuple[in
     q = SalePostPhoto.select().where(SalePostPhoto.product_id==product_id)
     photo_infos = []
     for photo in q:
-        photo_infos.append((photo.chat_id, photo.msg_id))
+        photo_infos.append((photo.chat_id, photo.message_id))
     return post.chat_id, post.message_id, "", photo_infos
 
 
