@@ -212,4 +212,4 @@ def get_db_unmatching_date_product_ids():
     products = SalePostId.select()
     for product in products:
         if not is_sale_post_date_actual(product.product_id, product.chat_id):
-            yield product
+            yield product.product_id
