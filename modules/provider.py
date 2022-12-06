@@ -48,6 +48,7 @@ def get_removed_sale_product_ids():
     posted_products = get_posted_product_ids()
     db_products = get_db_product_ids()
     removed_ids = list(set(posted_products) - set(db_products))
+    print(removed_ids)
 
     return removed_ids
 
@@ -61,8 +62,10 @@ def get_edit_products():
 def get_edit_sale_products():
     edit_product_ids = get_db_edit_product_ids()
     unmatching_date_ids = list(get_db_unmatching_date_product_ids())
+    print(unmatching_date_ids)
     product_ids = set(edit_product_ids)
     product_ids.union(unmatching_date_ids)
+    print(product_ids)
     for product_id in product_ids:
         product = get_product_info(product_id)
         yield product
