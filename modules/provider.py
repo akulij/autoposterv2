@@ -61,6 +61,7 @@ def get_edit_products():
 
 def get_edit_sale_products():
     edit_product_ids = get_db_edit_product_ids()
+    edit_product_ids = set(edit_product_ids) & set(get_posted_sale_product_ids())
     unmatching_date_ids = list(get_db_unmatching_date_product_ids())
     print(unmatching_date_ids)
     product_ids = set(edit_product_ids)
