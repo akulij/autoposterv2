@@ -12,6 +12,7 @@ from modules.provider import (
         delete_preposts,
         get_removed_sale_product_ids,
         delete_sale_post,
+        get_unmatching_sale_products,
         )
 from modules.storer import (
         get_renew_flag,
@@ -34,7 +35,7 @@ async def main():
             await make_post(product)
             print(f"edited product {product}")
 
-        if get_renew_flag():
+        if get_renew_flag() or len(list(get_unmatching_sale_products())):
             print("deleting unneeded")
             await delete_sale_products()
             await delete_preposts()
@@ -42,10 +43,10 @@ async def main():
             await make_prepost()
 
         print("making sale posts")
-        for product_id in get_removed_sale_product_ids():
-            await delete_sale_post(product_id)
-        for product in get_edit_sale_products():
-            await make_sale_post(product)
+        # for product_id in get_removed_sale_product_ids():
+        #     await delete_sale_post(product_id)
+        # for product in get_edit_sale_products():
+        #     await make_sale_post(product)
         for product in get_sale_products():
             await make_sale_post(product)
 
