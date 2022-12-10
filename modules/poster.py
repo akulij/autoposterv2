@@ -79,7 +79,7 @@ async def publish_to_telegram(product: ProductInfo, is_sale: bool = False) -> tu
                 for part in parts:
                     if part[0] == "#":
                         n = int(part[1:])
-                        pictures.pop(n)
+                        pictures.pop(n-1)
             time.sleep(10)
 
 async def renew_telegram_post(chat_id: int, msg_id: int, product: ProductInfo, prev_text: str, photo_infos: list[tuple[int, int]], is_sale: bool = False):
