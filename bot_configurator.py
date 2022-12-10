@@ -6,6 +6,7 @@ from aiogram.types import InputFile, InputMediaPhoto
 from modules import storer
 from modules.db import set_refresh_all
 from keyboards import start_keyboard
+from modules.builder import build_prepost
 
 load_dotenv()
 
