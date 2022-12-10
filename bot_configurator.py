@@ -51,9 +51,15 @@ async def update_post(message: types.Message):
     is_admin = storer.is_user_admin(message.from_user.id)
     if is_admin:
         prepost = storer.get_prepost_info()
+        caption = build_prepost(prepost.caption)
         for chat_id, message_id in storer.get_preposts():
-            photo_media = InputMediaPhoto(InputFile(prepost.photo), caption=prepost.caption)
+            # if prepost.photo:
+            if prepost.is_photo_file:
+                photo_media = InputMediaPhoto(InputFile(prepost.photo), caption=caption)
+            else:
+                photo_media = InputMediaPhoto(prepost.photo, caption=caption)
             await bot.edit_message_media(photo_media, chat_id, message_id)
+        await message.answer("Успешно!")
 
 @dp.message_handler(lambda message: message.text == "Изменить формат поста")
 async def change_post_format(message: types.Message):
