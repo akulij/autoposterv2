@@ -77,7 +77,6 @@ async def publish_to_telegram(product: ProductInfo, is_sale: bool = False) -> tu
             if "#" in str(e):
                 parts = str(e).split()
                 for part in parts:
-                    print(part)
                     if part[0] == "#":
                         n = int(part[1:])
                         print(n)
