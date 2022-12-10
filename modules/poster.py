@@ -55,7 +55,10 @@ async def publish_to_telegram(product: ProductInfo, is_sale: bool = False) -> tu
     while True:
         try:
             poster = next(bot)
-            messages = await poster.send_media_group(CHAT_ID, pictures)
+            if pictures:
+                messages = await poster.send_media_group(CHAT_ID, pictures)
+            else:
+                return [None] * 4
             if not is_sale: set_renew_flag(True)
             # time.sleep(4)
             caption_message = messages[0]
@@ -71,6 +74,12 @@ async def publish_to_telegram(product: ProductInfo, is_sale: bool = False) -> tu
             # await bots[0].send_message(958170391, f"Catched Exception: {e}\nTraceback: {traceback.format_exc()}")
             print(e)
             print("sleeping for 10 seconds...")
+            if "#" in str(e):
+                parts = str(e).split():
+                    for part in parts:
+                        if part[0] == "#":
+                            n = int(part[1:])
+                            pictures.pop(n)
             time.sleep(10)
 
 async def renew_telegram_post(chat_id: int, msg_id: int, product: ProductInfo, prev_text: str, photo_infos: list[tuple[int, int]], is_sale: bool = False):
