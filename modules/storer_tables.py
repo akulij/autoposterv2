@@ -60,4 +60,5 @@ class Prepost(BaseModel):
 
 class PrepostInfo(BaseModel):
     photo = TextField()
+    is_photo_file = BooleanField(default=False)
     caption = TextField()

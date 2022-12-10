@@ -119,15 +119,15 @@ def get_renew_flag() -> bool:
     else:
         return False
 
-def get_prepost_info():
+def get_prepost_info() -> PrepostInfo:
     return PrepostInfo.select().get()
 
-def set_prepost_info(caption: str | None = None, photo: str | None = None):
+def set_prepost_info(caption: str | None = None, photo: str | None = None, is_photo_file: bool = False):
     if PrepostInfo.select().exists():
         if caption:
             PrepostInfo.update(caption=caption).execute()
         if photo:
-            PrepostInfo.update(photo=photo).execute()
+            PrepostInfo.update(photo=photo, is_photo_file=is_photo_file).execute()
     else:
         PrepostInfo.create(photo=photo, caption=caption)
 

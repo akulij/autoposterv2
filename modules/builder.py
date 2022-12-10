@@ -1,6 +1,7 @@
 import datetime
 from typing import Literal
 from .db import ProductInfo
+from . import storer
 from . import storer as db_peewee
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
@@ -91,3 +92,28 @@ def parse_sizes(sizes_dict):
             f = f"{code}{sizes[0]:.0f}-{sizes[1]:.0f}"
             ps.append(f)
     return ", ".join(ps)
+
+def build_prepost(fmt: str) -> str:
+    # fmt: str = storer.get_prepost_info().caption
+    date = datetime.datetime.now()
+    month_strings = (
+            "января",
+            "февраля",
+            "марта",
+            "апреля",
+            "мая",
+            "июня",
+            "июля",
+            "августя",
+            "сентября",
+            "октября",
+            "ноября",
+            "декабря",
+            )
+    
+    day = date.strftime("%d")
+    month_index = int(date.strftime("%-m"))-1
+    month = month_strings[month_index].upper()
+    info = f"НАШЛИ РАСПРОДАЖИ НА {day} {month}"
+
+    return fmt.replace("/дата", date.strftime("%d-%m-%Y")).replace("/инфо", info)

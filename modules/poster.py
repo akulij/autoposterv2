@@ -9,7 +9,7 @@ from aiogram import Bot
 
 from .types import ProductInfo
 from .db import get_product_picture_links
-from .builder import build_message, build_sale_message
+from .builder import build_message, build_sale_message, build_prepost
 from .storer import set_renew_flag
 
 from dotenv import load_dotenv
@@ -106,9 +106,13 @@ async def delete_telegram_message(chat_id: int, msg_id: int):
     await next(bot).delete_message(chat_id, msg_id)
 
 async def publish_prepost_telegram(prepost):
+    caption = build_prepost(prepost.caption)
     if prepost.photo:
-        msg = await next(bot).send_photo(CHAT_ID, InputFile(prepost.photo), prepost.caption, parse_mode="HTML")
+        if prepost.is_photo_file:
+            msg = await next(bot).send_photo(CHAT_ID, InputFile(prepost.photo), caption, parse_mode="HTML")
+        else:
+            msg = await next(bot).send_photo(CHAT_ID, prepost.photo, caption, parse_mode="HTML")
     else:
-        msg = await next(bot).send_message(CHAT_ID, prepost.caption, parse_mode="HTML")
+        msg = await next(bot).send_message(CHAT_ID, caption, parse_mode="HTML")
 
     return (msg.chat.id, msg.message_id)

@@ -74,7 +74,7 @@ async def change_prepost_photo(message: types.Message):
     is_admin = storer.is_user_admin(message.from_user.id)
     if is_admin:
         storer.set_user_state(message.from_user.id, "change_prepost_photo")
-        await message.answer("Отправте картинку")
+        await message.answer("Отправте картинку или ссылку")
 
 @dp.message_handler(lambda message: message.text == "Изменить формат акционного поста")
 async def change_sale_post_format(message: types.Message):
@@ -141,10 +141,9 @@ async def any_message(message: types.Message):
             await message.answer("Успешно!")
             # state none
             storer.set_user_state(message.from_user.id, "none")
-        elif user_state == "change_prepost_photo_dbg":
-            # insert message to db
-            await message.photo[0].download("pictures/prepost.png")
-            # message of success
+        elif user_state == "change_prepost_photo":
+            url = message.text
+            storer.set_prepost_info(photo=url, is_photo_file=False)
             await message.answer("Успешно!")
             # state none
             storer.set_user_state(message.from_user.id, "none")
@@ -161,6 +160,7 @@ async def photo_message(message: types.Message):
             # insert message to db
             print(message.photo)
             await message.photo[-1].download("pictures/prepost.png")
+            storer.set_prepost_info(photo="pictures/prepost.png", is_photo_file=True)
             # message of success
             await message.answer("Успешно!")
             # state none
