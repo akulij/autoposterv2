@@ -30,9 +30,13 @@ async def main():
             # time.sleep(2)
             print(f"made post of {product}")
         print("editing products...")
+        edit_pool = []
         for product in get_edit_products():
             # set_renew_flag(True)
-            await make_post(product)
+            edit_pool.append(make_post(product))
+            if len(edit_pool) == 20:
+                asyncio.gather(*edit_pool)
+                edit_pool.clear()
             print(f"edited product {product}")
 
         if get_renew_flag() or len(list(get_unmatching_sale_products())):
