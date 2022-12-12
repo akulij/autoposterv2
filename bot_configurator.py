@@ -35,6 +35,7 @@ async def greeting(message: types.Message):
 
 @dp.message_handler(commands=["refresh_all"])
 async def refresh(message: types.Message):
+    print(f"update from {message.from_user.id}")
     is_admin = storer.is_user_admin(message.from_user.id)
     if is_admin:
         set_refresh_all(True)
