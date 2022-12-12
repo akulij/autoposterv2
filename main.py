@@ -21,7 +21,7 @@ from modules.storer import (
 
 
 async def main():
-    while True:
+    if True:
         print("posting new products...")
         for product in get_new_products():
             set_renew_flag(True)

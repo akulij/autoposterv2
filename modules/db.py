@@ -50,6 +50,7 @@ def get_db_edit_product_ids() -> list[int]:
     products = session.scalars(q).all()
 
     return products
+print(get_db_edit_product_ids())
 
 def set_refresh_all(flag: bool):
     q = update(ProductFlags).where().values(update_flag_ru = int(flag))
