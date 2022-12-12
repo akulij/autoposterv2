@@ -119,7 +119,8 @@ def get_renew_flag() -> bool:
     else:
         return False
 
-def get_prepost_info() -> PrepostInfo:
+# def get_prepost_info() -> PrepostInfo:
+def get_prepost_info():
     return PrepostInfo.select().get()
 
 def set_prepost_info(caption: str | None = None, photo: str | None = None, is_photo_file: bool = False):
@@ -213,3 +214,13 @@ def get_db_unmatching_date_product_ids():
     for product in products:
         if not is_sale_post_date_actual(product.product_id, product.chat_id):
             yield product.product_id
+
+def get_messages_desc():
+    messages = PostId.select().order_by(PostId.message_id.desc())
+    msg_list = []
+    for msg in messages:
+        msg_list.append(msg)
+
+    return msg_list
+
+print(get_messages_desc())

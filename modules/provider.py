@@ -24,6 +24,7 @@ from .storer import (
         delete_prepost,
         get_sale_product_message,
         get_db_unmatching_date_product_ids,
+        get_messages_desc,
         )
 from .poster import (publish_to_telegram,
         renew_telegram_post,
@@ -55,9 +56,13 @@ def get_removed_sale_product_ids():
 
 def get_edit_products():
     edit_product_ids = get_db_edit_product_ids()
-    for product_id in edit_product_ids:
-        product = get_product_info(product_id)
-        yield product
+    for product_item in get_messages_desc():
+        if product_item.product_id in edit_product_ids:
+            product = get_product_info(product_item.product_id)
+            yield product
+    # for product_id in edit_product_ids:
+    #     product = get_product_info(product_id)
+    #     yield product
 # print(get_edit_products().__next__())
 
 def get_edit_sale_products():
