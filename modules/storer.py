@@ -222,5 +222,3 @@ def get_messages_desc():
         msg_list.append(msg)
 
     return msg_list
-
-print(get_messages_desc())
