@@ -72,8 +72,10 @@ class ProductFlags(Base):
     __tablename__ = "boxed_prod"
 
     id = Column(Integer, primary_key=True)
-    update_flag = Column(Integer)
-    update_flag_ru = Column(Integer)
+    update_flag_man = Column(Integer)
+    update_flag_woman = Column(Integer)
+    update_flag_man_ru = Column(Integer)
+    update_flag_woman_ru = Column(Integer)
 
 class Promos(Base):
     __tablename__ = "bot_promos"

@@ -1,4 +1,6 @@
+import os
 import re
+from typing import Literal
 from string import ascii_uppercase, digits
 from random import choice
 from typing import Generator
@@ -21,6 +23,9 @@ SessionUri = sessionmaker(bind=engine_uri)
 session_uri = SessionUri()
 
 POSSIBLE_CHARS = ascii_uppercase + digits
+GENDER: Literal["man", "woman"] = os.getenv("GENDER")
+assert GENDER in ["man", "woman"]
+update_flag = ProductFlags.update_flag_man_ru if GENDER == "man" else ProductFlags.update_flag_woman_ru
 
 def _test():
     q = select(Product).join(ProductFlags, Product.id == ProductFlags.id).where(ProductFlags.update_flag_ru == 1)
@@ -46,19 +51,25 @@ def get_db_sale_product_ids() -> list[int]:
     return products
 
 def get_db_edit_product_ids() -> list[int]:
-    q = select(Product.id).join(ProductFlags, Product.id == ProductFlags.id).where((ProductFlags.update_flag_ru == 1), (Product.active == 1))
+    q = select(Product.id).join(ProductFlags, Product.id == ProductFlags.id).where((update_flag == 1), (Product.active == 1))
     products = session.scalars(q).all()
 
     return products
 print(get_db_edit_product_ids())
 
 def set_refresh_all(flag: bool):
-    q = update(ProductFlags).where().values(update_flag_ru = int(flag))
+    if GENDER == "man":
+        q = update(ProductFlags).where().values(update_flag_man_ru = int(flag))
+    else:
+        q = update(ProductFlags).where().values(update_flag_woman_ru = int(flag))
     session.execute(q)
     session.commit()
 
 def set_edited(product_id: int):
-    q = update(ProductFlags).where(ProductFlags.id == product_id).values(update_flag_ru = 0)
+    if GENDER == "man":
+        q = update(ProductFlags).where(ProductFlags.id == product_id).values(update_flag_man_ru = 0)
+    else:
+        q = update(ProductFlags).where(ProductFlags.id == product_id).values(update_flag_woman_ru = 0)
     session.execute(q)
     session.commit()
 
