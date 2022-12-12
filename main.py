@@ -35,9 +35,13 @@ async def main():
             # set_renew_flag(True)
             edit_pool.append(make_post(product))
             if len(edit_pool) == 20:
+                print(len(edit_pool))
                 await asyncio.gather(*edit_pool)
                 edit_pool.clear()
+                print(len(edit_pool))
             print(f"edited product {product}")
+        if len(edit_pool):
+            await asyncio.gather(*edit_pool)
 
         if get_renew_flag() or len(list(get_unmatching_sale_products())):
             print("deleting unneeded")
