@@ -33,10 +33,11 @@ async def main():
         edit_pool = []
         for product in get_edit_products():
             # set_renew_flag(True)
-            edit_pool.append(make_post(product))
+            # edit_pool.append(make_post(product))
+            await make_post(product)
             if len(edit_pool) == 20:
                 print(len(edit_pool))
-                await asyncio.gather(*edit_pool)
+                # await asyncio.gather(*edit_pool)
                 edit_pool.clear()
                 print(len(edit_pool))
             print(f"edited product {product}")

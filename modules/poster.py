@@ -90,8 +90,10 @@ async def renew_telegram_post(chat_id: int, msg_id: int, product: ProductInfo, p
     link = get_product_picture_links(product.id)[0]
     photo = InputMediaPhoto(link, caption=msg, parse_mode="HTML")
     try:
+        print(f"trying to edit product {product.id}")
         await next(bot).edit_message_media(photo, chat_id=chat_id, message_id=msg_id)
     except:
+        print(f"product {product.id} not edited")
         pass
     plinks = get_product_picture_links(product.id)
     for photo_info, plink in zip(photo_infos, plinks[1:]):
