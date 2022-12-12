@@ -22,6 +22,9 @@ engine_uri = create_engine("mysql+mysqldb://akulijdev:rerfhtre@178.32.58.161:330
 SessionUri = sessionmaker(bind=engine_uri)
 session_uri = SessionUri()
 
+from dotenv import load_dotenv
+
+load_dotenv()
 POSSIBLE_CHARS = ascii_uppercase + digits
 GENDER: Literal["man", "woman"] = os.getenv("GENDER")
 assert GENDER in ["man", "woman"]
