@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from peewee import (
     SqliteDatabase,
     Model,
@@ -201,7 +201,7 @@ def is_sale_post_date_actual(product_id: int, chat_id: int):
     if not post:
         return False
     else:
-        date = datetime.now()
+        date = datetime.now() - timedelta(hours=1)
         date_posted = datetime.strptime(post.date_posted, "%Y-%m-%d")
         return all([
             date_posted.day == date.day,
