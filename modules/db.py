@@ -18,7 +18,7 @@ engine = create_engine("mysql+mysqldb://akulijdev:rerfhtre@178.32.58.161:3306/ye
 Session = sessionmaker(bind=engine)
 session = Session()
 
-engine_uri = create_engine("mysql+mysqldb://akulijdev:rerfhtre@178.32.58.161:3306/sneakerheadsu?charset=utf8mb4")
+engine_uri = create_engine("mysql+mysqldb://akulijdev:rerfhtre@178.32.58.161:3306/snkrs?charset=utf8mb4")
 SessionUri = sessionmaker(bind=engine_uri)
 session_uri = SessionUri()
 
