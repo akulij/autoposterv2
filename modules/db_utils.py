@@ -1,5 +1,6 @@
 import re
 from random import randint
+from math import ceil
 
 from sqlalchemy import select
 
@@ -16,6 +17,7 @@ def get_product_info(session, item_id: int, session_uri) -> ProductInfo:
     product = get_product_data(session, item_id)
     name = product.name_ru or product.name
     price = product.price_ru
+    price = ceil(price / 100) * 100
     sizes = get_product_sizes(session, item_id)
     tags = product.tags
     photo_url = f"https://www.snkrs.su/img/product/product_{item_id}/img.jpg"
