@@ -1,5 +1,6 @@
 import datetime
 from typing import Literal
+from math import ceil
 from .db import ProductInfo
 from . import storer
 from . import storer as db_peewee
@@ -58,6 +59,7 @@ def build_sale_message(product: ProductInfo, gender: Literal["man"] | Literal["w
             parsed_sizes = parse_sizes(grouped_sizes)
     post_format = db_peewee.get_sale_post_format()
     new_price = product.price * (100 - product.discount_size) / 100
+    new_price = ceil(new_price / 100) * 100
     date_now = datetime.datetime.strftime(datetime.datetime.now(), "%d-%m-%Y")
     url, order_url = build_keyboard(product, gender)
     msg = post_format.format(name=product.name, price=product.price, description=description, sizes=parsed_sizes, tags=tags, product_url=url, order_url=order_url, new_price=new_price, date=date_now)
