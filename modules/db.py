@@ -6,7 +6,7 @@ from random import choice
 from typing import Generator
 import datetime
 
-from sqlalchemy import creategine
+from sqlalchemy import create_engine
 from sqlalchemy import select, update, exists, insert
 from sqlalchemy.orm import sessionmaker
 
@@ -14,11 +14,11 @@ from .types import ProductInfo
 from .db_tables import *
 from . import db_utils
 
-engine = creategine("mysql+mysqldb://akulijdev:rerfhtre@178.32.58.161:3306/yeezydirect?charset=utf8mb4")
+engine = create_engine("mysql+mysqldb://akulijdev:rerfhtre@178.32.58.161:3306/yeezydirect?charset=utf8mb4")
 Session = sessionmaker(bind=engine)
 session = Session()
 
-engine_uri = creategine("mysql+mysqldb://akulijdev:rerfhtre@178.32.58.161:3306/snkrs?charset=utf8mb4")
+engine_uri = create_engine("mysql+mysqldb://akulijdev:rerfhtre@178.32.58.161:3306/snkrs?charset=utf8mb4")
 SessionUri = sessionmaker(bind=engine_uri)
 session_uri = SessionUri()
 
