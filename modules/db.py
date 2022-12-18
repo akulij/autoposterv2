@@ -6,7 +6,7 @@ from random import choice
 from typing import Generator
 import datetime
 
-from sqlalchemy import create_engine
+from sqlalchemy import creategine
 from sqlalchemy import select, update, exists, insert
 from sqlalchemy.orm import sessionmaker
 
@@ -14,11 +14,11 @@ from .types import ProductInfo
 from .db_tables import *
 from . import db_utils
 
-engine = create_engine("mysql+mysqldb://akulijdev:rerfhtre@178.32.58.161:3306/yeezydirect?charset=utf8mb4")
+engine = creategine("mysql+mysqldb://akulijdev:rerfhtre@178.32.58.161:3306/yeezydirect?charset=utf8mb4")
 Session = sessionmaker(bind=engine)
 session = Session()
 
-engine_uri = create_engine("mysql+mysqldb://akulijdev:rerfhtre@178.32.58.161:3306/sneakerheadsu?charset=utf8mb4")
+engine_uri = creategine("mysql+mysqldb://akulijdev:rerfhtre@178.32.58.161:3306/snkrs?charset=utf8mb4")
 SessionUri = sessionmaker(bind=engine_uri)
 session_uri = SessionUri()
 
@@ -28,11 +28,11 @@ load_dotenv()
 POSSIBLE_CHARS = ascii_uppercase + digits
 GENDER: Literal["man", "woman"] = os.getenv("GENDER")
 assert GENDER in ["man", "woman"]
-update_flag = ProductFlags.update_flag_man_ru if GENDER == "man" else ProductFlags.update_flag_woman_ru
+update_flag = ProductFlags.update_flag_man if GENDER == "man" else ProductFlags.update_flag_woman_ru
 
 def _test():
-    q = select(Product).join(ProductFlags, Product.id == ProductFlags.id).where(ProductFlags.update_flag_ru == 1)
-    # q = select(ProductFlags).where(ProductFlags.update_flag_ru == 1)
+    q = select(Product).join(ProductFlags, Product.id == ProductFlags.id).where(ProductFlags.update_flag == 1)
+    # q = select(ProductFlags).where(ProductFlags.update_flag == 1)
     print(dir(session.scalars(q)))
     print(session.scalars(q).all())
     for product in session.scalars(q):
@@ -62,17 +62,17 @@ print(get_db_edit_product_ids())
 
 def set_refresh_all(flag: bool):
     if GENDER == "man":
-        q = update(ProductFlags).where().values(update_flag_man_ru = int(flag))
+        q = update(ProductFlags).where().values(update_flag_man = int(flag))
     else:
-        q = update(ProductFlags).where().values(update_flag_woman_ru = int(flag))
+        q = update(ProductFlags).where().values(update_flag_woman = int(flag))
     session.execute(q)
     session.commit()
 
 def set_edited(product_id: int):
     if GENDER == "man":
-        q = update(ProductFlags).where(ProductFlags.id == product_id).values(update_flag_man_ru = 0)
+        q = update(ProductFlags).where(ProductFlags.id == product_id).values(update_flag_man = 0)
     else:
-        q = update(ProductFlags).where(ProductFlags.id == product_id).values(update_flag_woman_ru = 0)
+        q = update(ProductFlags).where(ProductFlags.id == product_id).values(update_flag_woman = 0)
     session.execute(q)
     session.commit()
 
