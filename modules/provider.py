@@ -116,10 +116,8 @@ def get_sale_products():
         yield product
 
 async def delete_product(product):
-    if is_sale_product_posted(product.id):
-        await delete_sale_post(product.id)
-    if is_product_posted(product.id):
-        await delete_post(product.id)
+    await delete_post(product.id)
+    await delete_sale_post(product.id)
 
 async def delete_post(product_id: int):
     for chat_id, msg_id in get_product_message(product_id):
