@@ -29,7 +29,7 @@ POSSIBLE_CHARS = ascii_uppercase + digits
 GENDER: Literal["man", "woman"] = os.getenv("GENDER")
 assert GENDER in ["man", "woman"]
 update_flag = ProductFlags.update_flag_man_ru if GENDER == "man" else ProductFlags.update_flag_woman_ru
-gender_filter = Product.gM if GENDER = "man" else Product.gW
+gender_filter = Product.gM if GENDER == "man" else Product.gW
 
 def _test():
     q = select(Product).join(ProductFlags, Product.id == ProductFlags.id).where(ProductFlags.update_flag_ru == 1)
