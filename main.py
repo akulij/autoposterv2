@@ -32,6 +32,7 @@ async def main():
             # time.sleep(2)
             print(f"made post of {product}")
         for product in get_delete_products():
+            print(f"deleting product {product.id}")
             await delete_product(product)
         print("editing products...")
         edit_pool = []
