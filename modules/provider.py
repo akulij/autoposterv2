@@ -32,7 +32,8 @@ from .storer import (
 from .poster import (publish_to_telegram,
         renew_telegram_post,
         delete_telegram_message,
-        publish_prepost_telegram
+        publish_prepost_telegram,
+        send_error,
         )
 
 
@@ -123,8 +124,8 @@ async def delete_post(product_id: int):
     for chat_id, msg_id in get_product_message(product_id):
         try:
             await delete_telegram_message(chat_id, msg_id)
-        except:
-            pass
+        except Exception as e:
+            await send_error(e)
         db_delete_post(product_id)
         for chat_id, msg_id in get_nophoto_posts(product_id, chat_id):
             try:
