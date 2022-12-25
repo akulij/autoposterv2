@@ -27,6 +27,7 @@ async def main():
         print("posting new products...")
         for product in get_new_products():
             if round(product.price) == 0: continue
+            if str(product.hpu) == "None": continue
             set_renew_flag(True)
             print(product)
             await make_post(product)
