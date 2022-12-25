@@ -15,8 +15,8 @@ def get_product_data(session, item_id: int) -> Product:
 
 def get_product_info(session, item_id: int, session_uri) -> ProductInfo:
     product = get_product_data(session, item_id)
-    name = product.name_ru or product.name
-    price = product.price_ru
+    name = product.name or product.name
+    price = product.price
     sizes = get_product_sizes(session, item_id)
     tags = product.tags
     photo_url = f"https://www.snkrs.su/img/product/product_{item_id}/img.jpg"
@@ -28,7 +28,7 @@ def get_product_info(session, item_id: int, session_uri) -> ProductInfo:
     # site_link = f"https://www.snkrs.su/product/{hpu}"
     # order_link = f"https://www.snkrs.su/checkouts/ocf5safdi0bypjlet01u_info_{item_id}"
     # description: str = str(product.Text_ru)[:200] if product.Text_ru else ""
-    description: str = str(product.Text_ru) if product.Text_ru else ""
+    description: str = str(product.Text) if product.Text else ""
     description = escape_chars(description)
     is_for_man = True if product.gM else False
     is_for_woman = True if product.gW else False
@@ -114,7 +114,7 @@ def get_product_picture_links(session, product_id: int):
     q = select(ProductPicture).where(ProductPicture.product_id == product_id).order_by(ProductPicture.sort)
     pictures = []
     for picture in session.scalars(q):
-        picture_link = f"https://www.sneakerhead.su/img/product/product_{product_id}/large_{picture.img}?v={randint(1,9999)}"
+        picture_link = f"https://www.snkrs.su/img/product/product_{product_id}/large_{picture.img}?v={randint(1,9999)}"
         if picture.img:
             pictures.append(picture_link)
 
