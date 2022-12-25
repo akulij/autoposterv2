@@ -125,7 +125,7 @@ async def delete_post(product_id: int):
         try:
             await delete_telegram_message(chat_id, msg_id)
         except Exception as e:
-            await send_error(e)
+            pass
         db_delete_post(product_id)
         for chat_id, msg_id in get_nophoto_posts(product_id, chat_id):
             try:
