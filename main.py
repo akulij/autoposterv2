@@ -26,6 +26,7 @@ async def main():
     if True:
         print("posting new products...")
         for product in get_new_products():
+            if round(product.price) == 0: continue
             set_renew_flag(True)
             print(product)
             await make_post(product)
