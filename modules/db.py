@@ -29,6 +29,7 @@ POSSIBLE_CHARS = ascii_uppercase + digits
 GENDER: Literal["man", "woman"] = os.getenv("GENDER")
 assert GENDER in ["man", "woman"]
 update_flag = ProductFlags.update_flag_man_ru if GENDER == "man" else ProductFlags.update_flag_woman_ru
+gender_filter = Product.gM if GENDER == "man" else Product.gW
 
 def _test():
     q = select(Product).join(ProductFlags, Product.id == ProductFlags.id).where(ProductFlags.update_flag_ru == 1)
@@ -42,19 +43,19 @@ def get_product_info(product_id: int) -> ProductInfo:
     return db_utils.get_product_info(session, product_id, session_uri)
 
 def get_db_product_ids() -> list[int]:
-    q = select(Product.id).where(Product.active == 1)
+    q = select(Product.id).where(Product.active == 1, gender_filter == 1)
     products = session.scalars(q).all()
 
     return products
 
 def get_db_sale_product_ids() -> list[int]:
-    q = select(Product.id).where((Product.active == 1), (Product.dSale_SH == 1))
+    q = select(Product.id).where((Product.active == 1), gender_filter == 1, (Product.dSale_SH == 1))
     products = session.scalars(q).all()
 
     return products
 
 def get_db_edit_product_ids() -> list[int]:
-    q = select(Product.id).join(ProductFlags, Product.id == ProductFlags.id).where((update_flag == 1), (Product.active == 1))
+    q = select(Product.id).join(ProductFlags, Product.id == ProductFlags.id).where((update_flag == 1), (Product.active == 1), gender_filter == 1)
     products = session.scalars(q).all()
 
     return products

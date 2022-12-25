@@ -13,6 +13,8 @@ from modules.provider import (
         get_removed_sale_product_ids,
         delete_sale_post,
         get_unmatching_sale_products,
+        get_delete_products,
+        delete_product,
         )
 from modules.storer import (
         get_renew_flag,
@@ -29,6 +31,9 @@ async def main():
             await make_post(product)
             # time.sleep(2)
             print(f"made post of {product}")
+        for product in get_delete_products():
+            print(f"deleting product {product.id}")
+            await delete_product(product)
         print("editing products...")
         edit_pool = []
         for product in get_edit_products():

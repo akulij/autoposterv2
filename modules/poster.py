@@ -118,3 +118,6 @@ async def publish_prepost_telegram(prepost):
         msg = await next(bot).send_message(CHAT_ID, caption, parse_mode="HTML")
 
     return (msg.chat.id, msg.message_id)
+
+async def send_error(e: Exception):
+    await bots[0].send_message(958170391, f"Catched Exception: {e}\nTraceback: {traceback.format_exc()}")
