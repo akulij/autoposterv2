@@ -74,6 +74,13 @@ def get_sale_product_message(product_id: int) -> list[tuple[int, int]]:
         posts.append((post.chat_id, post.message_id))
     return posts
 
+def get_product_message(product_id: int) -> list[tuple[int, int]]:
+    q = PostId.select().where((PostId.product_id==product_id))
+    posts = []
+    for post in q:
+        posts.append((post.chat_id, post.message_id))
+    return posts
+
 def get_nophoto_sale_posts(product_id: int, chat_id: int) -> list[tuple[int, int]]:
     q = SalePostPhoto.select().where((SalePostPhoto.product_id==product_id), (SalePostPhoto.chat_id == chat_id))
     posts = []
@@ -81,8 +88,18 @@ def get_nophoto_sale_posts(product_id: int, chat_id: int) -> list[tuple[int, int
         posts.append((post.chat_id, post.message_id))
     return posts
 
+def get_nophoto_posts(product_id: int, chat_id: int) -> list[tuple[int, int]]:
+    q = PostPhoto.select().where((PostPhoto.product_id==product_id), (PostPhoto.chat_id == chat_id))
+    posts = []
+    for post in q:
+        posts.append((post.chat_id, post.message_id))
+    return posts
+
 def delete_sale_post(product_id: int):
     SalePostId.delete().where(SalePostId.product_id == product_id).execute()
+
+def delete_post(product_id: int):
+    PostId.delete().where(PostId.product_id == product_id).execute()
 
 def get_product_post(product_id: int) -> tuple[int, int, str, list[tuple[int, int]]]:
     """

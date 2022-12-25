@@ -16,20 +16,24 @@ from .storer import (
         get_sale_product_post,
         get_posted_sale_product_ids,
         delete_sale_post as db_delete_sale_post,
+        delete_post as db_delete_post,
         get_nophoto_sale_posts,
+        get_nophoto_posts,
         get_sale_messages,
         get_prepost_info,
         create_prepost,
         get_preposts,
         delete_prepost,
         get_sale_product_message,
+        get_product_message,
         get_db_unmatching_date_product_ids,
         get_messages_desc,
         )
 from .poster import (publish_to_telegram,
         renew_telegram_post,
         delete_telegram_message,
-        publish_prepost_telegram
+        publish_prepost_telegram,
+        send_error,
         )
 
 
@@ -44,6 +48,19 @@ def get_new_products():
         yield product
 
     # return new_products
+
+def get_delete_products():
+    posted_products = get_posted_product_ids()
+    db_products = get_db_product_ids()
+    new_product_ids = list(set(posted_products) - set(db_products))
+    new_products = []
+    for product_id in new_product_ids:
+        product = get_product_info(product_id)
+        # new_products.append(product)
+        yield product
+
+def is_product_sale_posted(product_id: int):
+    return product_id in get_posted_sale_product_ids()
 
 def get_removed_sale_product_ids():
     posted_products = get_posted_sale_product_ids()
@@ -98,6 +115,23 @@ def get_sale_products():
         product = get_product_info(product_id)
         # new_products.append(product)
         yield product
+
+async def delete_product(product):
+    await delete_post(product.id)
+    await delete_sale_post(product.id)
+
+async def delete_post(product_id: int):
+    for chat_id, msg_id in get_product_message(product_id):
+        try:
+            await delete_telegram_message(chat_id, msg_id)
+        except Exception as e:
+            await send_error(e)
+        db_delete_post(product_id)
+        for chat_id, msg_id in get_nophoto_posts(product_id, chat_id):
+            try:
+                await delete_telegram_message(chat_id, msg_id)
+            except:
+                pass
 
 async def delete_sale_post(product_id: int):
     for chat_id, msg_id in get_sale_product_message(product_id):
